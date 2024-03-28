@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../../configs/themes/colors.dart';
-import '../../../../configs/themes/drop_shadows.dart';
-import '../../../../configs/themes/typography.dart';
-import '../../../domain/entities/testimonial_entity.dart';
-import '../../../global/extensions/hardcode.dart';
-import '../controllers/home_controller.dart';
-import '../widgets/tag.dart';
-import 'testimonial_edit_bottomsheet.dart';
+import '../../../configs/themes/colors.dart';
+import '../../../configs/themes/drop_shadows.dart';
+import '../../../configs/themes/typography.dart';
+import '../../domain/entities/testimonial_entity.dart';
+import '../extensions/hardcode.dart';
+import 'tag.dart';
 
-class TestimonialsSection extends GetWidget<HomePageController> {
+class TestimonialsSection extends StatelessWidget {
   const TestimonialsSection({super.key});
 
   @override
@@ -21,14 +18,9 @@ class TestimonialsSection extends GetWidget<HomePageController> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const IconButton(onPressed: null, icon: Icon(null)),
               TagComponent(label: "Testimonials".isHardcode),
-              IconButton(
-                onPressed: () => TestimonialEditBottomSheet.show(),
-                icon: const Icon(Icons.edit),
-              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -38,18 +30,23 @@ class TestimonialsSection extends GetWidget<HomePageController> {
             style: AppTypography.subtitleNormal.copyWith(color: AppColors.grayLight.shade600),
           ),
           const SizedBox(height: 24),
-          Obx(
-            () => ListView.separated(
-              itemCount: controller.currentUser.value.testimonials.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(height: 24);
-              },
-              itemBuilder: (BuildContext context, int index) {
-                return TestimonialItem(controller.currentUser.value.testimonials[index]);
-              },
-            ),
+          ListView.separated(
+            itemCount: 3,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: 24);
+            },
+            itemBuilder: (BuildContext context, int index) {
+              return TestimonialItem(
+                TestimonialEntity(
+                  name: "John Doe",
+                  title: "CEO",
+                  company: "Company",
+                  quote: "I'm a testimonial quote. Click here to edit me and add your own testimonial.",
+                ),
+              );
+            },
           ),
         ],
       ),

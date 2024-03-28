@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import '../controllers/home_controller.dart';
 
-import '../../../../configs/themes/colors.dart';
-import '../../../../configs/themes/typography.dart';
-import '../../../global/extensions/hardcode.dart';
-import '../widgets/social_media_contact.dart';
-import '../widgets/tag.dart';
+import '../../../configs/themes/colors.dart';
+import '../../../configs/themes/typography.dart';
+import '../extensions/hardcode.dart';
+import 'social_media_contact.dart';
+import 'tag.dart';
 
-class ContactSection extends GetWidget<HomePageController> {
+class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
   @override
@@ -32,21 +30,19 @@ class ContactSection extends GetWidget<HomePageController> {
             style: AppTypography.subtitleNormal.copyWith(color: AppColors.grayLight.shade600),
           ),
           const SizedBox(height: 24),
-          Obx(
-            () => Column(
-              children: [
-                ContactItem(
-                  icon: Icons.email_outlined,
-                  text: controller.currentUser.value.email.isHardcode,
-                  clipboardText: "Email copied to clipboard".isHardcode,
-                ),
-                ContactItem(
-                  icon: Icons.phone_outlined,
-                  text: controller.currentUser.value.phone.isHardcode,
-                  clipboardText: "Phone number copied to clipboard".isHardcode,
-                ),
-              ],
-            ),
+          Column(
+            children: [
+              ContactItem(
+                icon: Icons.email_outlined,
+                text: "nguyenminhtam.developer@gmail.com".isHardcode,
+                clipboardText: "Email copied to clipboard".isHardcode,
+              ),
+              ContactItem(
+                icon: Icons.phone_outlined,
+                text: "(+84) 338 072 985".isHardcode,
+                clipboardText: "Phone number copied to clipboard".isHardcode,
+              ),
+            ],
           ),
           const SizedBox(height: 24),
           Column(

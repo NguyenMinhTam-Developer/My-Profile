@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../configs/themes/colors.dart';
-import '../../../../configs/themes/drop_shadows.dart';
-import '../../../../configs/themes/typography.dart';
-import '../../../domain/entities/experience_entity.dart';
-import '../../../global/extensions/hardcode.dart';
-import '../controllers/home_controller.dart';
-import '../widgets/tag.dart';
-import 'experience_edit_bottomsheet.dart';
+import '../../../configs/themes/colors.dart';
+import '../../../configs/themes/drop_shadows.dart';
+import '../../../configs/themes/typography.dart';
+import '../../domain/entities/experience_entity.dart';
+import '../extensions/hardcode.dart';
+import 'tag.dart';
 
-class ExperienceSection extends GetWidget<HomePageController> {
+class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
 
   @override
@@ -22,14 +19,9 @@ class ExperienceSection extends GetWidget<HomePageController> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const IconButton(onPressed: null, icon: Icon(null)),
               TagComponent(label: "Experience".isHardcode),
-              IconButton(
-                onPressed: () => ExperienceEditBottomSheet.show(),
-                icon: const Icon(Icons.edit),
-              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -39,18 +31,24 @@ class ExperienceSection extends GetWidget<HomePageController> {
             style: AppTypography.subtitleNormal.copyWith(color: AppColors.grayLight.shade600),
           ),
           const SizedBox(height: 24),
-          Obx(
-            () => ListView.separated(
-              itemCount: controller.currentUser.value.experiences.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(height: 24);
-              },
-              itemBuilder: (BuildContext context, int index) {
-                return ExperienceItem(controller.currentUser.value.experiences[index]);
-              },
-            ),
+          ListView.separated(
+            itemCount: 3,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: 24);
+            },
+            itemBuilder: (BuildContext context, int index) {
+              return ExperienceItem(
+                ExperienceEntity(
+                  company: "Company".isHardcode,
+                  title: "Title".isHardcode,
+                  description: "Description".isHardcode,
+                  startDate: DateTime.now(),
+                  endDate: DateTime.now(),
+                ),
+              );
+            },
           ),
         ],
       ),

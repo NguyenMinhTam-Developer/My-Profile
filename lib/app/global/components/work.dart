@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import '../../../domain/entities/work_entity.dart';
-import 'work_edit_bottomsheet.dart';
-import '../controllers/home_controller.dart';
-import '../../../services/url_launcher.dart';
-import '../../../global/extensions/hardcode.dart';
-import '../../../../configs/themes/drop_shadows.dart';
 
-import '../../../../configs/themes/colors.dart';
-import '../../../../configs/themes/typography.dart';
-import '../widgets/tag.dart';
+import '../../../configs/themes/colors.dart';
+import '../../../configs/themes/drop_shadows.dart';
+import '../../../configs/themes/typography.dart';
+import '../../domain/entities/work_entity.dart';
+import '../../services/url_launcher.dart';
+import '../extensions/hardcode.dart';
+import 'tag.dart';
 
-class WorkSection extends GetWidget<HomePageController> {
+class WorkSection extends StatelessWidget {
   const WorkSection({super.key});
 
   @override
@@ -23,14 +20,9 @@ class WorkSection extends GetWidget<HomePageController> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const IconButton(onPressed: null, icon: Icon(null)),
               TagComponent(label: "Work".isHardcode),
-              IconButton(
-                onPressed: () => WorkEditBottomSheet.show(),
-                icon: const Icon(Icons.edit),
-              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -40,18 +32,25 @@ class WorkSection extends GetWidget<HomePageController> {
             style: AppTypography.subtitleNormal.copyWith(color: AppColors.grayLight.shade600),
           ),
           const SizedBox(height: 24),
-          Obx(
-            () => ListView.separated(
-              itemCount: controller.currentUser.value.works.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(height: 24);
-              },
-              itemBuilder: (BuildContext context, int index) {
-                return WorkItem(controller.currentUser.value.works[index]);
-              },
-            ),
+          ListView.separated(
+            itemCount: 3,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: 24);
+            },
+            itemBuilder: (BuildContext context, int index) {
+              return WorkItem(
+                WorkEntity(
+                  title: "Project Title",
+                  description: "I'm a project description. Click here to edit me.",
+                  appStoreUrl: null,
+                  playStoreUrl: null,
+                  websiteUrl: null,
+                  tags: ["Flutter", "Dart"],
+                ),
+              );
+            },
           ),
         ],
       ),

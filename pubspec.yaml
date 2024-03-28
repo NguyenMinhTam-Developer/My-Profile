@@ -14,11 +14,7 @@ dependencies:
   get: ^4.6.6
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
-  image_picker: ^1.0.7
-  get_storage: ^2.1.1
-  path_provider: ^2.1.2
   url_launcher: ^6.2.5
-  logger: ^2.2.0
   intl: 
   flutter_form_builder: ^9.2.1
   form_builder_validators: ^9.1.0

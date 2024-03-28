@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../configs/themes/colors.dart';
-import '../../../../configs/themes/themes.dart';
-import '../../../../configs/themes/typography.dart';
+import '../../../configs/themes/colors.dart';
+import '../../../configs/themes/themes.dart';
+import '../../../configs/themes/typography.dart';
 
 class TagComponent extends StatelessWidget {
   const TagComponent({super.key, required this.label});

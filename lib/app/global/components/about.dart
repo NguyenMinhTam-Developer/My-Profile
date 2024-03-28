@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../../configs/themes/colors.dart';
-import '../../../../configs/themes/typography.dart';
-import '../../../global/extensions/hardcode.dart';
-import '../controllers/home_controller.dart';
-import '../widgets/tag.dart';
-import 'about_edit_bottomsheet.dart';
+import '../../../configs/themes/colors.dart';
+import '../../../configs/themes/typography.dart';
+import '../extensions/hardcode.dart';
+import 'tag.dart';
 
-class AboutSection extends GetWidget<HomePageController> {
+class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
 
   @override
@@ -21,14 +18,9 @@ class AboutSection extends GetWidget<HomePageController> {
           Stack(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const IconButton(onPressed: null, icon: Icon(null)),
                   TagComponent(label: "About me".isHardcode),
-                  IconButton(
-                    onPressed: () => AboutEditBottomSheet.show(),
-                    icon: const Icon(Icons.edit),
-                  ),
                 ],
               ),
             ],
@@ -42,11 +34,9 @@ class AboutSection extends GetWidget<HomePageController> {
                 style: AppTypography.headingH3SemiBold,
               ),
               const SizedBox(height: 24),
-              Obx(
-                () => Text(
-                  controller.currentUser.value.aboutMe.isHardcode,
-                  style: AppTypography.body2Normal.copyWith(color: AppColors.grayLight.shade600),
-                ),
+              Text(
+                "I'm a paragraph. Click here to add your own text and edit me. It's easy. Just click “Edit Text” or double click me to add your own content and make changes to the font. Feel free to drag and drop me anywhere you like on your page. I’m a great place for you to tell a story and let your users know a little more about you.".isHardcode,
+                style: AppTypography.body2Normal.copyWith(color: AppColors.grayLight.shade600),
               ),
             ],
           )
