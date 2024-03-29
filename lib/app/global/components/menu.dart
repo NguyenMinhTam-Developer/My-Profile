@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_profile/app/global/components/button.dart';
 import 'package:my_profile/app/global/components/menu_link.dart';
 import 'package:my_profile/configs/themes/colors.dart';
 import 'package:my_profile/configs/themes/drop_shadows.dart';
@@ -87,17 +89,22 @@ class Menu extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
-                        icon: Icon(AppThemes.when(lightMode: Icons.light_mode_outlined, darkMode: Icons.dark_mode_outlined)),
+                        onPressed: () {
+                          Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+                        },
+                        icon: Icon(
+                          AppThemes.when(
+                            lightMode: Icons.light_mode_outlined,
+                            darkMode: Icons.dark_mode_outlined,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Placeholder(
-                    child: FilledButton(
-                      onPressed: () {},
-                      child: const Text("Download CV"),
-                    ),
+                  Button(
+                    onPressed: () {},
+                    label: "Download CV",
                   ),
                 ],
               ),

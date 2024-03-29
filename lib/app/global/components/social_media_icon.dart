@@ -26,11 +26,12 @@ class SocialMediaIcon extends StatelessWidget {
         height: size,
         width: size,
         colorFilter: ColorFilter.mode(
-            AppThemes.when(
-              lightMode: AppColors.grayLight.shade600,
-              darkMode: AppColors.grayDark.shade600,
-            ),
-            BlendMode.srcIn),
+          AppThemes.when(
+            lightMode: AppColors.grayLight.shade600,
+            darkMode: AppColors.grayDark.shade600,
+          ),
+          BlendMode.srcIn,
+        ),
       ),
     );
   }

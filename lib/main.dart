@@ -30,6 +30,7 @@ class _MyAppState extends State<MyApp> {
       child: GetMaterialApp(
         title: 'My Profile',
         theme: AppThemes.lightTheme,
+        darkTheme: AppThemes.darkTheme,
         getPages: AppPage.pages,
         initialRoute: AppRoutes.home,
       ),
