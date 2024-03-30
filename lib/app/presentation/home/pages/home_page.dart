@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_profile/app/global/components/menu.dart';
-import 'package:my_profile/app/presentation/home/controllers/home_controller.dart';
-import '../../../../configs/themes/colors.dart';
+import '../../../global/components/menu.dart';
+import '../controllers/home_controller.dart';
 
 import '../../../global/components/about.dart';
 import '../../../global/components/contact.dart';
 import '../../../global/components/experience.dart';
 import '../../../global/components/footer.dart';
+import '../../../global/components/header.dart';
 import '../../../global/components/hero.dart';
 import '../../../global/components/skills.dart';
 import '../../../global/components/testimonials.dart';
@@ -20,51 +20,25 @@ class HomePage extends GetWidget<HomePageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Header(),
-      drawerScrimColor: AppColors.grayLight.shade900.withOpacity(0.1),
       endDrawer: const Menu(),
-      body: const SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
+      body: SingleChildScrollView(
+        controller: controller.scrollController,
+        physics: const ClampingScrollPhysics(),
         child: SafeArea(
           child: Column(
             children: [
-              HeroSection(),
-              AboutSection(),
-              SkillsSection(),
-              ExperienceSection(),
-              WorkSection(),
-              TestimonialsSection(),
-              ContactSection(),
-              FooterSection(),
+              HeroSection(key: controller.heroKey),
+              AboutSection(key: controller.aboutKey),
+              SkillsSection(key: controller.skillsKey),
+              ExperienceSection(key: controller.experienceKey),
+              WorkSection(key: controller.workKey),
+              TestimonialsSection(key: controller.testimonialsKey),
+              ContactSection(key: controller.contactKey),
+              const FooterSection(),
             ],
           ),
         ),
       ),
     );
   }
-}
-
-class Header extends StatelessWidget implements PreferredSizeWidget {
-  const Header({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      centerTitle: false,
-      backgroundColor: AppColors.grayLight,
-      surfaceTintColor: AppColors.grayLight,
-      title: Text(
-        "<TM />",
-        style: TextStyle(
-          fontSize: 30,
-          color: AppColors.grayLight.shade800,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_profile/configs/themes/themes.dart';
-import 'package:my_profile/configs/themes/typography.dart';
 
 import '../../../configs/themes/colors.dart';
 
@@ -9,13 +7,41 @@ class Button extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.label,
+    this.themeMode = ThemeMode.system,
   });
 
   final String label;
   final Function()? onPressed;
+  final ThemeMode themeMode;
 
   @override
   Widget build(BuildContext context) {
+    Color defaultBackgroundColor;
+    Color hoverBackgroundColor;
+    Color activeBackgroundColor;
+    Color defaultForegroundColor;
+
+    switch (themeMode) {
+      case ThemeMode.light:
+        defaultBackgroundColor = AppColors.grayLight.shade900;
+        hoverBackgroundColor = AppColors.grayLight.shade700;
+        activeBackgroundColor = AppColors.grayLight.shade800;
+        defaultForegroundColor = AppColors.grayLight.shade50;
+        break;
+      case ThemeMode.dark:
+        defaultBackgroundColor = AppColors.grayDark.shade900;
+        hoverBackgroundColor = AppColors.grayDark.shade700;
+        activeBackgroundColor = AppColors.grayDark.shade800;
+        defaultForegroundColor = AppColors.grayDark.shade50;
+        break;
+      case ThemeMode.system:
+        defaultBackgroundColor = AppColors.grayLight.shade900;
+        hoverBackgroundColor = AppColors.grayLight.shade700;
+        activeBackgroundColor = AppColors.grayLight.shade800;
+        defaultForegroundColor = AppColors.grayLight.shade50;
+        break;
+    }
+
     return FilledButton(
       onPressed: onPressed,
       style: ButtonStyle(
@@ -26,26 +52,23 @@ class Button extends StatelessWidget {
         backgroundColor: MaterialStateProperty.resolveWith(
           (states) {
             if (states.contains(MaterialState.pressed)) {
-              return AppColors.grayLight.shade800;
+              return activeBackgroundColor;
             }
 
             if (states.contains(MaterialState.hovered)) {
-              return AppColors.grayLight.shade700;
+              return hoverBackgroundColor;
             }
 
-            return AppColors.grayLight.shade900;
+            return defaultBackgroundColor;
+          },
+        ),
+        foregroundColor: MaterialStateProperty.resolveWith(
+          (states) {
+            return defaultForegroundColor;
           },
         ),
       ),
-      child: Text(
-        label,
-        style: AppTypography.body2Normal.copyWith(
-          color: AppThemes.when(
-            lightMode: AppColors.grayLight.shade50,
-            darkMode: AppColors.grayDark.shade50,
-          ),
-        ),
-      ),
+      child: Text(label),
     );
   }
 }

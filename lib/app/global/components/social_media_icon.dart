@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../../../configs/themes/colors.dart';
-import '../../../configs/themes/themes.dart';
 import '../../domain/entities/social_media_entity.dart';
+import '../controllers/theme_controller.dart';
 
 class SocialMediaIcon extends StatelessWidget {
   const SocialMediaIcon({
@@ -19,18 +20,20 @@ class SocialMediaIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onPressed,
-      icon: SvgPicture.asset(
-        _getPlatformIcon(),
-        height: size,
-        width: size,
-        colorFilter: ColorFilter.mode(
-          AppThemes.when(
-            lightMode: AppColors.grayLight.shade600,
-            darkMode: AppColors.grayDark.shade600,
+    return Obx(
+      () => IconButton(
+        onPressed: onPressed,
+        icon: SvgPicture.asset(
+          _getPlatformIcon(),
+          height: size,
+          width: size,
+          colorFilter: ColorFilter.mode(
+            ThemeController.findOrInitialize.when(
+              lightMode: AppColors.grayLight.shade600,
+              darkMode: AppColors.grayDark.shade600,
+            ),
+            BlendMode.srcIn,
           ),
-          BlendMode.srcIn,
         ),
       ),
     );

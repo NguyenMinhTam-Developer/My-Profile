@@ -1,19 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:my_profile/configs/themes/colors.dart';
-import 'package:my_profile/configs/themes/typography.dart';
+import '../../../configs/themes/colors.dart';
+import '../../../configs/themes/typography.dart';
 
 class MenuLink extends StatelessWidget {
   const MenuLink({
     super.key,
     required this.onTap,
     required this.title,
+    this.themeMode = ThemeMode.system,
   });
 
   final VoidCallback onTap;
   final String title;
+  final ThemeMode themeMode;
 
   @override
   Widget build(BuildContext context) {
+    Color hoverColor;
+    Color defaultColor;
+
+    switch (themeMode) {
+      case ThemeMode.light:
+        hoverColor = AppColors.grayLight.shade900;
+        defaultColor = AppColors.grayLight.shade600;
+        break;
+      case ThemeMode.dark:
+        hoverColor = AppColors.grayDark.shade900;
+        defaultColor = AppColors.grayDark.shade600;
+        break;
+      case ThemeMode.system:
+        hoverColor = AppColors.grayLight.shade900;
+        defaultColor = AppColors.grayLight.shade600;
+        break;
+    }
+
     return TextButton(
       onPressed: onTap,
       style: ButtonStyle(
@@ -24,10 +44,10 @@ class MenuLink extends StatelessWidget {
         foregroundColor: MaterialStateProperty.resolveWith(
           (states) {
             if (states.contains(MaterialState.hovered)) {
-              return AppColors.grayLight.shade900;
+              return hoverColor;
             }
 
-            return AppColors.grayLight.shade600;
+            return defaultColor;
           },
         ),
       ),

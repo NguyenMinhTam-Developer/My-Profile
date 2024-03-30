@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'app/global/controllers/theme_controller.dart';
 import 'configs/routes/route_name.dart';
 import 'configs/routes/route_page.dart';
 import 'configs/themes/themes.dart';
@@ -33,6 +34,7 @@ class _MyAppState extends State<MyApp> {
         darkTheme: AppThemes.darkTheme,
         getPages: AppPage.pages,
         initialRoute: AppRoutes.home,
+        initialBinding: ThemeBinding(),
       ),
     );
   }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../configs/themes/colors.dart';
 import '../../../configs/themes/drop_shadows.dart';
 import '../../../configs/themes/typography.dart';
 import '../../domain/entities/experience_entity.dart';
+import '../controllers/theme_controller.dart';
 import '../extensions/hardcode.dart';
 import 'tag.dart';
 
@@ -13,44 +15,53 @@ class ExperienceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 64),
-      color: AppColors.grayLight.shade50,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TagComponent(label: "Experience".isHardcode),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            "Here is a quick summary of my most recent experiences:".isHardcode,
-            textAlign: TextAlign.center,
-            style: AppTypography.subtitleNormal.copyWith(color: AppColors.grayLight.shade600),
-          ),
-          const SizedBox(height: 24),
-          ListView.separated(
-            itemCount: 3,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: 24);
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return ExperienceItem(
-                ExperienceEntity(
-                  company: "Company".isHardcode,
-                  title: "Title".isHardcode,
-                  description: "Description".isHardcode,
-                  startDate: DateTime.now(),
-                  endDate: DateTime.now(),
-                ),
-              );
-            },
-          ),
-        ],
+    return Obx(
+      () => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 64),
+        color: ThemeController.findOrInitialize.when(
+          lightMode: AppColors.grayLight.shade50,
+          darkMode: AppColors.grayDark.shade50,
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TagComponent(label: "Experience".isHardcode),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "Here is a quick summary of my most recent experiences:".isHardcode,
+              textAlign: TextAlign.center,
+              style: AppTypography.subtitleNormal.copyWith(
+                  color: ThemeController.findOrInitialize.when(
+                lightMode: AppColors.grayLight.shade600,
+                darkMode: AppColors.grayDark.shade600,
+              )),
+            ),
+            const SizedBox(height: 24),
+            ListView.separated(
+              itemCount: 3,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(height: 24);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                return ExperienceItem(
+                  ExperienceEntity(
+                    company: "Company".isHardcode,
+                    title: "Title".isHardcode,
+                    description: "Description".isHardcode,
+                    startDate: DateTime.now(),
+                    endDate: DateTime.now(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -72,7 +83,10 @@ class ExperienceItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: AppColors.grayLight,
+        color: ThemeController.findOrInitialize.when(
+          lightMode: AppColors.grayLight,
+          darkMode: AppColors.grayDark.shade100,
+        ),
         borderRadius: BorderRadius.circular(12),
         boxShadow: AppDropShadows.md,
       ),
@@ -85,7 +99,10 @@ class ExperienceItem extends StatelessWidget {
                 height: 64,
                 width: 64,
                 decoration: BoxDecoration(
-                  color: AppColors.grayLight.shade200,
+                  color: ThemeController.findOrInitialize.when(
+                    lightMode: AppColors.grayLight.shade200,
+                    darkMode: AppColors.grayDark.shade200,
+                  ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -103,7 +120,11 @@ class ExperienceItem extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             "$startDate - $endDate",
-            style: AppTypography.body2Medium.copyWith(color: AppColors.grayLight.shade700),
+            style: AppTypography.body2Medium.copyWith(
+                color: ThemeController.findOrInitialize.when(
+              lightMode: AppColors.grayLight.shade700,
+              darkMode: AppColors.grayDark.shade700,
+            )),
           ),
           const SizedBox(height: 16),
           Text(
@@ -113,7 +134,12 @@ class ExperienceItem extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             experience.description,
-            style: AppTypography.body2Medium.copyWith(color: AppColors.grayLight.shade600),
+            style: AppTypography.body2Medium.copyWith(
+              color: ThemeController.findOrInitialize.when(
+                lightMode: AppColors.grayLight.shade600,
+                darkMode: AppColors.grayDark.shade600,
+              ),
+            ),
           ),
         ],
       ),
