@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:my_profile/app/domain/entities/testimonial_entity.dart';
 
@@ -27,39 +26,6 @@ class TestimonialEditBottomSheet extends StatefulWidget {
 
 class _TestimonialEditBottomSheetState extends State<TestimonialEditBottomSheet> {
   final controller = Get.find<HomePageController>();
-  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
-
-  Future<void> _onSave() async {
-    bool isFormValid = true;
-
-    for (var skills in testimonialList) {
-      if (skills.formKey.currentState?.validate() != true) {
-        isFormValid = false;
-        setState(() {
-          _autovalidateMode = AutovalidateMode.onUserInteraction;
-        });
-      }
-    }
-
-    if (isFormValid) {
-      controller.currentUser.value = controller.currentUser.value.copyWith(
-        testimonials: testimonialList
-            .map(
-              (e) => TestimonialEntity(
-                quote: e.formKey.currentState?.fields["quote"]?.value as String,
-                company: e.formKey.currentState?.fields["name"]?.value as String,
-                title: e.formKey.currentState?.fields["title"]?.value as String,
-                name: e.formKey.currentState?.fields["name"]?.value as String,
-              ),
-            )
-            .toList(),
-      );
-
-      await controller.updateUser();
-
-      Get.back();
-    }
-  }
 
   List<TestimonialItemViewModel> testimonialList = [];
 
@@ -70,10 +36,9 @@ class _TestimonialEditBottomSheetState extends State<TestimonialEditBottomSheet>
     testimonialList = List.generate(
       controller.currentUser.value.testimonials.length,
       (index) {
-        var formKey = GlobalKey<FormBuilderState>();
         var initialValue = controller.currentUser.value.testimonials[index];
 
-        return TestimonialItemViewModel(formKey: formKey, experience: initialValue);
+        return TestimonialItemViewModel(initialValue);
       },
     );
   }
@@ -81,7 +46,7 @@ class _TestimonialEditBottomSheetState extends State<TestimonialEditBottomSheet>
   @override
   Widget build(BuildContext context) {
     return DefaultBottomSheetLayout(
-      title: "Edit Experience",
+      title: "Edit Testimonials",
       content: ListView.separated(
         itemCount: testimonialList.length + 1,
         padding: const EdgeInsets.all(16),
@@ -93,12 +58,7 @@ class _TestimonialEditBottomSheetState extends State<TestimonialEditBottomSheet>
             return TextButton.icon(
               onPressed: () {
                 setState(() {
-                  testimonialList.add(
-                    TestimonialItemViewModel(
-                      formKey: GlobalKey<FormBuilderState>(),
-                      experience: null,
-                    ),
-                  );
+                  testimonialList.add(TestimonialItemViewModel(null));
                 });
               },
               icon: const Icon(Icons.add),
@@ -106,126 +66,114 @@ class _TestimonialEditBottomSheetState extends State<TestimonialEditBottomSheet>
             );
           }
 
-          return FormBuilder(
-            key: testimonialList[index].formKey,
-            autovalidateMode: _autovalidateMode,
-            child: Card(
-              margin: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.grayLight.shade200,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.sentiment_very_satisfied_outlined,
-                        size: 24,
-                      ),
+          return Card(
+            margin: EdgeInsets.zero,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: AppColors.grayLight.shade200,
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    title: FormBuilderTextField(
-                      name: "name",
-                      keyboardType: TextInputType.name,
-                      initialValue: testimonialList[index].experience?.name,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        labelText: "Recommender",
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              testimonialList.removeAt(index);
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.clear_rounded,
-                          ),
+                    child: const Icon(
+                      Icons.sentiment_very_satisfied_outlined,
+                      size: 24,
+                    ),
+                  ),
+                  title: FormBuilderTextField(
+                    name: "name",
+                    keyboardType: TextInputType.name,
+                    controller: testimonialList[index].nameController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: "Recommender",
+                      errorText: testimonialList[index].nameErrorText,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            testimonialList.removeAt(index);
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.clear_rounded,
                         ),
                       ),
-                      style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
+                    ),
+                    style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
+                  ),
+                ),
+                ListTile(
+                  leading: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: AppColors.grayLight.shade200,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.badge_rounded,
+                      size: 24,
                     ),
                   ),
-                  ListTile(
-                    leading: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.grayLight.shade200,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.badge_rounded,
-                        size: 24,
-                      ),
+                  title: FormBuilderTextField(
+                    name: "title",
+                    keyboardType: TextInputType.name,
+                    controller: testimonialList[index].titleController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: "Title",
+                      errorText: testimonialList[index].titleErrorText,
                     ),
-                    title: FormBuilderTextField(
-                      name: "title",
-                      keyboardType: TextInputType.name,
-                      initialValue: testimonialList[index].experience?.title,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        labelText: "Title",
-                      ),
-                      style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
+                    style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
+                  ),
+                ),
+                ListTile(
+                  leading: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: AppColors.grayLight.shade200,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.apartment_outlined,
+                      size: 24,
                     ),
                   ),
-                  ListTile(
-                    leading: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.grayLight.shade200,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.apartment_outlined,
-                        size: 24,
-                      ),
+                  title: FormBuilderTextField(
+                    name: "company",
+                    keyboardType: TextInputType.name,
+                    controller: testimonialList[index].companyController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: "Company",
+                      errorText: testimonialList[index].companyErrorText,
                     ),
-                    title: FormBuilderTextField(
-                      name: "company",
-                      keyboardType: TextInputType.name,
-                      initialValue: testimonialList[index].experience?.company,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        labelText: "Company",
-                      ),
-                      style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                    ),
+                    style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
                   ),
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: FormBuilderTextField(
-                      name: "quote",
-                      keyboardType: TextInputType.multiline,
-                      textInputAction: TextInputAction.newline,
-                      initialValue: testimonialList[index].experience?.quote,
-                      minLines: 5,
-                      maxLines: 10,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        labelText: "Quote",
-                      ),
-                      style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
+                ),
+                const Divider(),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: FormBuilderTextField(
+                    name: "quote",
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    controller: testimonialList[index].quoteController,
+                    minLines: 5,
+                    maxLines: 10,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: "Quote",
+                      errorText: testimonialList[index].quoteErrorText,
                     ),
+                    style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
@@ -236,14 +184,96 @@ class _TestimonialEditBottomSheetState extends State<TestimonialEditBottomSheet>
       ),
     );
   }
+
+  Future<void> _onSave() async {
+    bool isFormValid = true;
+
+    for (var testimonial in testimonialList) {
+      if (testimonial.nameController.text.isEmpty) {
+        setState(() {
+          testimonial.nameErrorText = "Name is required";
+        });
+
+        isFormValid = false;
+      } else {
+        setState(() {
+          testimonial.nameErrorText = null;
+        });
+      }
+
+      if (testimonial.titleController.text.isEmpty) {
+        setState(() {
+          testimonial.titleErrorText = "Title is required";
+        });
+
+        isFormValid = false;
+      } else {
+        setState(() {
+          testimonial.titleErrorText = null;
+        });
+      }
+
+      if (testimonial.companyController.text.isEmpty) {
+        setState(() {
+          testimonial.companyErrorText = "Company is required";
+        });
+
+        isFormValid = false;
+      } else {
+        setState(() {
+          testimonial.companyErrorText = null;
+        });
+      }
+
+      if (testimonial.quoteController.text.isEmpty) {
+        setState(() {
+          testimonial.quoteErrorText = "Quote is required";
+        });
+
+        isFormValid = false;
+      } else {
+        setState(() {
+          testimonial.quoteErrorText = null;
+        });
+      }
+    }
+
+    if (isFormValid) {
+      controller.currentUser.value = controller.currentUser.value.copyWith(
+        testimonials: testimonialList
+            .map(
+              (e) => TestimonialEntity(
+                name: e.nameController.text,
+                title: e.titleController.text,
+                company: e.companyController.text,
+                quote: e.quoteController.text,
+              ),
+            )
+            .toList(),
+      );
+
+      Get.back();
+
+      await controller.updateUser();
+    }
+  }
 }
 
 class TestimonialItemViewModel {
-  final GlobalKey<FormBuilderState> formKey;
-  final TestimonialEntity? experience;
+  late final TextEditingController nameController;
+  late final TextEditingController titleController;
+  late final TextEditingController companyController;
+  late final TextEditingController quoteController;
 
-  TestimonialItemViewModel({
-    required this.formKey,
-    required this.experience,
-  });
+  String? nameErrorText;
+  String? titleErrorText;
+  String? companyErrorText;
+  String? quoteErrorText;
+
+  TestimonialItemViewModel(TestimonialEntity? experience) {
+    nameController = TextEditingController(text: experience?.name);
+    titleController = TextEditingController(text: experience?.title);
+    companyController = TextEditingController(text: experience?.company);
+    quoteController = TextEditingController(text: experience?.quote);
+  }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/home_controller.dart';
-import '../../../services/url_launcher.dart';
-import '../../../../configs/themes/typography.dart';
 
 import '../../../../configs/themes/colors.dart';
+import '../../../../configs/themes/typography.dart';
+import '../../../services/url_launcher.dart';
+import '../controllers/home_controller.dart';
 
 class FooterSection extends GetWidget<HomePageController> {
   const FooterSection({super.key});

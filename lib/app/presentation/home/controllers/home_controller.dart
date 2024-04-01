@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import '../../../data/repositories/user_repository.dart';
 import '../../../data/sources/local/user_local_data_source.dart';
 import '../../../domain/entities/user_entity.dart';
@@ -23,6 +24,23 @@ class HomePageController extends GetxController {
 
   Future<void> updateUser() async {
     currentUser.value = await _userRespository.updateUser(currentUser.value);
+
+    if (Get.isSnackbarOpen) {
+      Get.closeAllSnackbars();
+    }
+
+    Get.showSnackbar(const GetSnackBar(
+      title: 'Success',
+      message: 'User updated successfully',
+      duration: Duration(seconds: 5),
+      snackStyle: SnackStyle.GROUNDED,
+    ));
+
+    return;
+  }
+
+  Future<void> refreshUser() async {
+    currentUser.value = await _userRespository.updateUser(UserEntity.me());
 
     return;
   }

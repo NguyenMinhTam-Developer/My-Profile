@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import '../controllers/home_controller.dart';
 
 import '../../../../configs/themes/colors.dart';
 import '../../../../configs/themes/typography.dart';
 import '../../../global/extensions/hardcode.dart';
+import '../controllers/home_controller.dart';
 import '../widgets/social_media_contact.dart';
 import '../widgets/tag.dart';
 

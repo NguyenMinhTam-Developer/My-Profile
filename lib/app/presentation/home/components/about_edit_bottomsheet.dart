@@ -34,9 +34,9 @@ class _AboutEditBottomSheetState extends State<AboutEditBottomSheet> {
         aboutMe: _formKey.currentState!.fields['aboutMe']!.value as String,
       );
 
-      await controller.updateUser();
-
       Get.back();
+
+      await controller.updateUser();
     } else {
       setState(() {
         _autovalidateMode = AutovalidateMode.onUserInteraction;

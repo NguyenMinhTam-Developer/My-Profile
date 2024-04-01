@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../configs/themes/colors.dart';
 import '../../../../configs/themes/typography.dart';
-
 import '../controllers/home_controller.dart';
 import '../widgets/picture_frame.dart';
 import '../widgets/social_media_contact.dart';

@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../services/image_picker_service.dart';
+
 import '../../../../configs/themes/colors.dart';
+import '../../../services/image_picker_service.dart';
 
 class PictureFrameWidget extends StatelessWidget {
   const PictureFrameWidget({
@@ -23,14 +24,18 @@ class PictureFrameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        File? file = await ImagePickerService.pickImage(source: ImageSource.gallery);
+        try {
+          File? file = await ImagePickerService.pickImage(source: ImageSource.gallery);
 
-        if (file != null) {
-          String? newImage = await ImagePickerService.saveImage(file);
+          if (file != null) {
+            String? newImage = await ImagePickerService.saveImage(file);
 
-          if (newImage != null) {
-            onImageChange(newImage);
+            if (newImage != null) {
+              onImageChange(newImage);
+            }
           }
+        } catch (e) {
+          print(e);
         }
       },
       child: SizedBox(

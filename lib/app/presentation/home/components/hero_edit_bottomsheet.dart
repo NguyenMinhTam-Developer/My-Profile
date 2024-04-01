@@ -39,9 +39,9 @@ class _HeroEditBottomSheetState extends State<HeroEditBottomSheet> {
         phone: _formKey.currentState!.fields['phone']!.value as String,
       );
 
-      await controller.updateUser();
-
       Get.back();
+
+      controller.updateUser();
     } else {
       setState(() {
         _autovalidateMode = AutovalidateMode.onUserInteraction;
@@ -52,7 +52,7 @@ class _HeroEditBottomSheetState extends State<HeroEditBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return DefaultBottomSheetLayout(
-      title: "Edit profile information",
+      title: "Edit Profile Information",
       content: FormBuilder(
         key: _formKey,
         autovalidateMode: _autovalidateMode,

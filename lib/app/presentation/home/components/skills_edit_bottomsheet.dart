@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:my_profile/app/domain/entities/skills_entity.dart';
@@ -16,7 +15,6 @@ class SkillsEditBottomSheet extends StatefulWidget {
         const SkillsEditBottomSheet._(),
         isScrollControlled: true,
         isDismissible: false,
-        enableDrag: false,
       );
 
   const SkillsEditBottomSheet._();
@@ -28,36 +26,7 @@ class SkillsEditBottomSheet extends StatefulWidget {
 class _SkillsEditBottomSheetState extends State<SkillsEditBottomSheet> {
   final controller = Get.find<HomePageController>();
 
-  Future<void> _onSave() async {
-    bool isFormValid = true;
-
-    for (var skills in skillsList) {
-      if (!skills.formKey.currentState!.saveAndValidate()) {
-        isFormValid = false;
-        setState(() {
-          _autovalidateMode = AutovalidateMode.onUserInteraction;
-        });
-        break;
-      }
-    }
-
-    if (isFormValid) {
-      controller.currentUser.value = controller.currentUser.value.copyWith(
-        skills: skillsList
-            .map(
-              (e) => SkillsEntity(name: e.formKey.currentState!.value["name"] as String),
-            )
-            .toList(),
-      );
-
-      await controller.updateUser();
-
-      Get.back();
-    }
-  }
-
   List<SkillsItemViewModel> skillsList = [];
-  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   void initState() {
@@ -66,10 +35,12 @@ class _SkillsEditBottomSheetState extends State<SkillsEditBottomSheet> {
     skillsList = List.generate(
       controller.currentUser.value.skills.length,
       (index) {
-        var formKey = GlobalKey<FormBuilderState>();
         var initialValue = controller.currentUser.value.skills[index].name;
 
-        return SkillsItemViewModel(formKey: formKey, initialValue: initialValue);
+        return SkillsItemViewModel(
+          textEditingController: TextEditingController(text: initialValue),
+          errorText: null,
+        );
       },
     );
   }
@@ -91,8 +62,8 @@ class _SkillsEditBottomSheetState extends State<SkillsEditBottomSheet> {
                 setState(() {
                   skillsList.add(
                     SkillsItemViewModel(
-                      formKey: GlobalKey<FormBuilderState>(),
-                      initialValue: null,
+                      textEditingController: TextEditingController(),
+                      errorText: null,
                     ),
                   );
                 });
@@ -102,47 +73,43 @@ class _SkillsEditBottomSheetState extends State<SkillsEditBottomSheet> {
             );
           }
 
-          return FormBuilder(
-            key: skillsList[index].formKey,
-            autovalidateMode: _autovalidateMode,
-            child: Card(
-              margin: EdgeInsets.zero,
-              child: ListTile(
-                leading: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.grayLight.shade200,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.verified,
-                    size: 24,
-                  ),
+          return Card(
+            margin: EdgeInsets.zero,
+            child: ListTile(
+              leading: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.grayLight.shade200,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                title: FormBuilderTextField(
-                  name: "name",
-                  keyboardType: TextInputType.text,
-                  initialValue: skillsList[index].initialValue,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Enter your skills",
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          skillsList.removeAt(index);
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.clear_rounded,
-                      ),
+                child: const Icon(
+                  Icons.verified,
+                  size: 24,
+                ),
+              ),
+              title: TextFormField(
+                keyboardType: TextInputType.text,
+                controller: skillsList[index].textEditingController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Enter your skills",
+                  errorText: skillsList[index].errorText,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        skillsList.removeAt(index);
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.clear_rounded,
                     ),
                   ),
-                  style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                  ]),
                 ),
+                style: AppTypography.body1Normal.copyWith(color: AppColors.grayLight.shade800),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                ]),
               ),
             ),
           );
@@ -154,14 +121,59 @@ class _SkillsEditBottomSheetState extends State<SkillsEditBottomSheet> {
       ),
     );
   }
+
+  Future<void> _onSave() async {
+    bool isFormValid = true;
+
+    for (var i = 0; i < skillsList.length; i++) {
+      if (skillsList[i].textEditingController!.text.isEmpty) {
+        setState(() {
+          skillsList[i] = skillsList[i].copyWith(
+            errorText: "This field is required",
+          );
+        });
+
+        isFormValid = false;
+      } else {
+        setState(() {
+          skillsList[i] = skillsList[i].copyWith(
+            errorText: null,
+          );
+        });
+      }
+    }
+
+    if (isFormValid) {
+      controller.currentUser.value = controller.currentUser.value.copyWith(
+        skills: skillsList
+            .map(
+              (e) => SkillsEntity(name: e.textEditingController!.text),
+            )
+            .toList(),
+      );
+
+      Get.back();
+
+      await controller.updateUser();
+    }
+  }
 }
 
 class SkillsItemViewModel {
-  final GlobalKey<FormBuilderState> formKey;
-  final String? initialValue;
+  final TextEditingController? textEditingController;
+  final String? errorText;
 
   SkillsItemViewModel({
-    required this.formKey,
-    required this.initialValue,
+    required this.textEditingController,
+    required this.errorText,
   });
+
+  SkillsItemViewModel copyWith({
+    String? errorText,
+  }) {
+    return SkillsItemViewModel(
+      textEditingController: textEditingController,
+      errorText: errorText ?? this.errorText,
+    );
+  }
 }

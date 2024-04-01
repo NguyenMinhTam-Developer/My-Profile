@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../../../configs/themes/colors.dart';
 import '../../../../configs/themes/themes.dart';
 import '../../../domain/entities/social_media_entity.dart';

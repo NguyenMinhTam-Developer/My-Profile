@@ -22,6 +22,12 @@ class HomePage extends GetWidget<HomePageController> {
       appBar: AppBar(
         actions: [
           IconButton(
+            onPressed: () {
+              controller.refreshUser();
+            },
+            icon: const Icon(Icons.refresh_rounded),
+          ),
+          IconButton(
             onPressed: () async {
               final GetStorage storage = GetStorage();
 
