@@ -21,12 +21,13 @@ class HomePage extends GetWidget<HomePageController> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          // IconButton(
-          //   onPressed: () {
-          //     controller.refreshUser();
-          //   },
-          //   icon: const Icon(Icons.refresh_rounded),
-          // ),
+          IconButton(
+            onPressed: () {
+              controller.refreshUser();
+            },
+            tooltip: "Refresh user data to original",
+            icon: const Icon(Icons.refresh_rounded),
+          ),
           IconButton(
             onPressed: () async {
               final GetStorage storage = GetStorage();

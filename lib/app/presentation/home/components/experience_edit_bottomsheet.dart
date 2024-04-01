@@ -137,22 +137,23 @@ class _ExperienceEditBottomSheetState extends State<ExperienceEditBottomSheet> {
                         child: FormBuilderDateTimePicker(
                           name: "startDate",
                           onChanged: (value) {
-                            if (value != null && experienceList[index].endDate != null) {
-                              if (value.isAfter(experienceList[index].endDate!)) {
-                                setState(() {
-                                  experienceList[index].startDateError = "Start date must be before end date";
-                                });
-                              } else {
-                                setState(() {
-                                  experienceList[index].startDateError = null;
-                                  experienceList[index].startDate = value;
-                                });
-                              }
+                            if (value != null) {
+                              setState(() {
+                                experienceList[index].startDateError = null;
+                                experienceList[index].startDate = value;
+
+                                if (experienceList[index].endDate != null) {
+                                  if (value.isAfter(experienceList[index].endDate!)) {
+                                    experienceList[index].startDateError = "Start date must be before end date";
+                                  }
+                                }
+                              });
                             }
                           },
                           keyboardType: TextInputType.text,
                           initialValue: experienceList[index].startDate,
                           inputType: InputType.date,
+                          lastDate: experienceList[index].endDate ?? DateTime.now(),
                           format: DateFormat("MMM yyyy"),
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -167,23 +168,24 @@ class _ExperienceEditBottomSheetState extends State<ExperienceEditBottomSheet> {
                         child: FormBuilderDateTimePicker(
                           name: "endDate",
                           onChanged: (value) {
-                            if (value != null && experienceList[index].startDate != null) {
-                              if (value.isBefore(experienceList[index].startDate!)) {
-                                setState(() {
-                                  experienceList[index].endDateError = "End date must be after start date";
-                                });
-                              } else {
-                                setState(() {
-                                  experienceList[index].endDateError = null;
-                                  experienceList[index].endDate = value;
-                                });
-                              }
+                            if (value != null) {
+                              setState(() {
+                                experienceList[index].endDateError = null;
+                                experienceList[index].endDate = value;
+
+                                if (experienceList[index].startDate != null) {
+                                  if (value.isBefore(experienceList[index].startDate!)) {
+                                    experienceList[index].endDateError = "End date must be after start date";
+                                  }
+                                }
+                              });
                             }
                           },
                           keyboardType: TextInputType.text,
                           initialValue: experienceList[index].endDate,
                           inputType: InputType.date,
                           format: DateFormat("MMM yyyy"),
+                          firstDate: experienceList[index].startDate,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             labelText: "End date",
