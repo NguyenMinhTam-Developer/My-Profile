@@ -17,6 +17,7 @@ class WorkEditBottomSheet extends StatefulWidget {
         const WorkEditBottomSheet._(),
         isScrollControlled: true,
         isDismissible: false,
+        enableDrag: false,
       );
 
   const WorkEditBottomSheet._();

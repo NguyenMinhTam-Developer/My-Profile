@@ -13,6 +13,7 @@ class HeroEditBottomSheet extends StatefulWidget {
         const HeroEditBottomSheet._(),
         isScrollControlled: true,
         isDismissible: false,
+        enableDrag: false,
       );
 
   const HeroEditBottomSheet._();

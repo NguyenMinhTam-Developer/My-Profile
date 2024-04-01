@@ -17,6 +17,7 @@ class ExperienceEditBottomSheet extends StatefulWidget {
         const ExperienceEditBottomSheet._(),
         isScrollControlled: true,
         isDismissible: false,
+        enableDrag: false,
       );
 
   const ExperienceEditBottomSheet._();
@@ -29,40 +30,52 @@ class _ExperienceEditBottomSheetState extends State<ExperienceEditBottomSheet> {
   final controller = Get.find<HomePageController>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
+  List<ExperienceItemViewModel> experienceList = [];
+
   Future<void> _onSave() async {
-    bool isFormValid = true;
+    try {
+      print("isFormValid");
+      bool isFormValid = true;
 
-    for (var skills in experienceList) {
-      if (skills.formKey.currentState?.validate() != true) {
-        isFormValid = false;
-        setState(() {
-          _autovalidateMode = AutovalidateMode.onUserInteraction;
-        });
+      print("checking form validity");
+      for (var experiences in experienceList) {
+        print(experiences.formKey.currentState);
+        if (!experiences.formKey.currentState!.saveAndValidate()) {
+          print("form is invalid");
+          isFormValid = false;
+          setState(() {
+            _autovalidateMode = AutovalidateMode.onUserInteraction;
+          });
+        }
       }
-    }
 
-    if (isFormValid) {
-      controller.currentUser.value = controller.currentUser.value.copyWith(
-        experiences: experienceList
-            .map(
-              (e) => ExperienceEntity(
-                company: e.formKey.currentState!.fields["name"]!.value as String,
-                startDate: e.formKey.currentState!.fields["startDate"]!.value as DateTime,
-                endDate: e.formKey.currentState!.fields["endDate"]!.value as DateTime,
-                title: e.formKey.currentState!.fields["title"]!.value as String,
-                description: e.formKey.currentState!.fields["description"]!.value as String,
-              ),
-            )
-            .toList(),
+      if (isFormValid) {
+        controller.currentUser.value = controller.currentUser.value.copyWith(
+          experiences: experienceList
+              .map(
+                (e) => ExperienceEntity(
+                  company: e.formKey.currentState!.fields["name"]!.value as String,
+                  startDate: e.formKey.currentState!.fields["startDate"]!.value as DateTime,
+                  endDate: e.formKey.currentState!.fields["endDate"]!.value as DateTime,
+                  title: e.formKey.currentState!.fields["title"]!.value as String,
+                  description: e.formKey.currentState!.fields["description"]!.value as String,
+                ),
+              )
+              .toList(),
+        );
+
+        await controller.updateUser();
+
+        Get.back();
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
       );
-
-      await controller.updateUser();
-
-      Get.back();
     }
   }
-
-  List<ExperienceItemViewModel> experienceList = [];
 
   @override
   void initState() {

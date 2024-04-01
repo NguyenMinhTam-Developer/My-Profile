@@ -16,6 +16,7 @@ class TestimonialEditBottomSheet extends StatefulWidget {
         const TestimonialEditBottomSheet._(),
         isScrollControlled: true,
         isDismissible: false,
+        enableDrag: false,
       );
 
   const TestimonialEditBottomSheet._();

@@ -16,6 +16,7 @@ class SkillsEditBottomSheet extends StatefulWidget {
         const SkillsEditBottomSheet._(),
         isScrollControlled: true,
         isDismissible: false,
+        enableDrag: false,
       );
 
   const SkillsEditBottomSheet._();

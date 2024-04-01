@@ -13,6 +13,7 @@ class AboutEditBottomSheet extends StatefulWidget {
         const AboutEditBottomSheet._(),
         isScrollControlled: true,
         isDismissible: false,
+        enableDrag: false,
       );
 
   const AboutEditBottomSheet._();
